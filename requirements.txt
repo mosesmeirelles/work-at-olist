@@ -1,3 +1,6 @@
 Django==2.1
 djangorestframework==3.8.2
 dj-database-url==0.5.0
+python-decouple==3.1
+psycopg2-binary==2.7.5
+gunicorn==19.4.1
