@@ -1,0 +1,3 @@
+-r requirements.txt
+
+python-decouple==3.1
