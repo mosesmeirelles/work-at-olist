@@ -1,8 +1,8 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from phonebillsapi.api.views.call_record_view import CallRecordView
+from phonebillsapi.api.views.call_record_view import CallRecordViewSet
 
+router = SimpleRouter()
+router.register('callrecord', CallRecordViewSet, base_name='callrecord')
 
-urlpatterns = [
-    path('callrecord/', CallRecordView.as_view(), name='callrecord')
-]
+urlpatterns = [] + router.urls
