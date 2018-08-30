@@ -1,0 +1,15 @@
+language: python
+python:
+  - 3.6.2
+install:
+  - pip install -r requirements-dev.txt
+script:
+  - cp contrib/env-sample .env
+  - python manage.py test
+deploy:
+  provider: heroku
+  api_key:
+    secure: hiOvimC8AkiKNNS8dNtost3aJpTAU2igVjmjGQRnGRpyKmJncsI4dXN/XaARytKFEoKsdqVXazlWKRlSAhXOS5evEo5K9I6WQsl21eEQE2hWbuqiQ7rhLuq2uBRyYF+8X0DQaD351YYpgRAtYdpEJKEK/Xj5/B+ueo6YU9XbwAN0Q/J5F39+WrO/JK28M7KNeiKeGpTxZ3kY7PjQdxlG3pK+m41QYP04cqNC1mWAICav85GfIHssfKpTIALREGJpD0BMLqdQU5YhBrzbXT4Wngc/B+WK2o9gJC0fYAiUuFbJPJL9BpCezmFgbPtJlFAaCdFpJ2r3CSbXq9uVDuNa0zaOLQsXou5rUi7Rk0oPwRnBejoBxmEOsvYCPIsLRb0hLZ12KviS9WX9cATpR6TH091v5O2jKv6BUJ59QTXa2td/pgZ2P6wu3WwbkDgbUT4nG1z9LkRQVZS7J1msoyi/DWxXCrtgTo/NfAaDIpv1uht3i8w3hdHL1Cin7sxwkQurngBzAIfJVHcdY/c9AeQoG6gOetHWoH4bmbR3lrZmZjOYoV5idHoOep/XKb91+jgHLQTiRJrVz+nYwoEswla3/OYme71SStUFkIo6Slc2PNhRMetgYhk0G/lefmBlC8n1v0NS6vEwXi034ybLinh2L85EOMRTRluRtSAY/j8wGW8=
+  app: phonebills
+  on:
+    repo: moshemeirelles/work-at-olist
