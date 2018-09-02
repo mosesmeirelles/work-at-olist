@@ -1,0 +1,24 @@
+[
+  {
+    "model": "bill.tariff",
+    "pk": 1,
+    "fields": {
+      "tariff_time": "standard",
+      "standing_charge": "0.36",
+      "call_charge": "0.09",
+      "interval_start": "06:00:00",
+      "interval_end": "22:00:00"
+    }
+  },
+  {
+    "model": "bill.tariff",
+    "pk": 2,
+    "fields": {
+      "tariff_time": "reduced",
+      "standing_charge": "0.36",
+      "call_charge": "0.00",
+      "interval_start": "22:00:00",
+      "interval_end": "06:00:00"
+    }
+  }
+]

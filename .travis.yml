@@ -5,6 +5,8 @@ install:
   - pip install -r requirements-dev.txt
 script:
   - cp contrib/env-sample .env
+  - python manage.py migrate
+  - python manage.py loaddata fixtures/*.json
   - python manage.py test
 deploy:
   provider: heroku

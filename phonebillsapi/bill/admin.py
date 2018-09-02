@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from phonebillsapi.bill.models import Tariff
+
+
+admin.site.register(Tariff)
