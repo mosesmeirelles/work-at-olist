@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'phonebillsapi.api',
+    'phonebillsapi.bill',
 ]
 
 MIDDLEWARE = [
@@ -111,3 +112,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 APPEND_SLASH = False
+
+TESTDATA = os.path.join(BASE_DIR, 'contrib/sample-data.json')
