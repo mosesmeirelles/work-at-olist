@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.test import TestCase
@@ -6,11 +7,24 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 
 from phonebillsapi.api.models import CallRecord
-from phonebillsapi.bill.models import BillCallRecord
+from phonebillsapi.bill.models import BillCallRecord, Tariff
 
 
 class TestCallRecordView(TestCase):
     def setUp(self):
+        mommy.make(Tariff,
+                   tariff_time=Tariff.STANDARD,
+                   interval_start=datetime.time(6, 0, 0),
+                   interval_end=datetime.time(22, 0, 0),
+                   call_charge=0.09,
+                   standing_charge=0.36)
+        mommy.make(Tariff,
+                   tariff_time=Tariff.REDUCED,
+                   interval_start=datetime.time(22, 0, 0),
+                   interval_end=datetime.time(6, 0, 0),
+                   call_charge=0.09,
+                   standing_charge=0.36)
+
         self.url_list = reverse('api:callrecord-list')
 
     def test_insert_call_start_record(self):
