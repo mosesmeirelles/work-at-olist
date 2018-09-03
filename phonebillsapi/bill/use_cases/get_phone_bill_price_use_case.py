@@ -3,15 +3,17 @@ from datetime import timedelta, datetime
 from phonebillsapi.api.models import CallRecord
 
 
-class GetPhoneBillUseCase():
+class GetPhoneBillPriceUseCase:
 
-    def execute(self, reference_month, reference_year):
+    def execute(self, reference_month, reference_year, subscriber):
         call_records_pairs = CallRecord.objects.get_completed_pairs(timestamp__month=reference_month,
-                                                                    timestamp__year=reference_year)
+                                                                    timestamp__year=reference_year,
+                                                                    source=subscriber)
 
-        total_minutes = 0
+        price = 0
         for pair in call_records_pairs:
             start, end = pair[0], pair[1]
+            total_minutes = 0
 
             if start.timestamp.day != end.timestamp.day:
                 total_minutes += (datetime(end.timestamp.year, end.timestamp.month, end.timestamp.day) -
@@ -32,7 +34,9 @@ class GetPhoneBillUseCase():
                                       seconds=end.timestamp.second) - timedelta(hours=6)
                 total_minutes += time_diff.total_seconds() // 60
 
-        return round(total_minutes * 0.09 + 0.36, 2)
+            price += total_minutes * 0.09 + 0.36
+
+        return round(price, 2)
 
     @classmethod
     def initialize(cls):

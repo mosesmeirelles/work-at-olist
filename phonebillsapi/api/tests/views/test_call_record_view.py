@@ -6,6 +6,7 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 
 from phonebillsapi.api.models import CallRecord
+from phonebillsapi.bill.models import BillCallRecord
 
 
 class TestCallRecordView(TestCase):
@@ -24,6 +25,30 @@ class TestCallRecordView(TestCase):
         response = self.client.post(self.url_list, data=json.dumps(data), content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_insert_call_start_and_end_record_should_create_bill_call_record(self):
+        start = {
+            "id": 1,
+            "type": "start",
+            "timestamp": "2016-02-29T12:00:00Z",
+            "call_id": 70,
+            "source": '99988526423',
+            "destination": '9993468278'
+        }
+
+        end = {
+            "id": 9,
+            "type": "end",
+            "timestamp": "2016-02-29T14:00:00Z",
+            "call_id": 70
+        }
+        self.client.post(self.url_list, data=json.dumps(start), content_type='application/json')
+        self.client.post(self.url_list, data=json.dumps(end), content_type='application/json')
+
+        bill_call_record = BillCallRecord.objects.all()
+
+        self.assertEqual(len(bill_call_record), 1)
+        self.assertEqual(bill_call_record.first().call_record_start.call_id, 70)
 
     def test_get_all_call_records(self):
         mommy.make(CallRecord)

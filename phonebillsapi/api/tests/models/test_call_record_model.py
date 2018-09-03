@@ -7,6 +7,7 @@ from phonebillsapi.api.models import CallRecord
 class CallRecordQuerySetTests(TestCase):
     def setUp(self):
         self.call_id = 12
+        self.subscriber = 99988526423
 
     def test_get_pair(self):
         mommy.make(CallRecord, call_id=self.call_id, type=CallRecord.START)
@@ -33,6 +34,40 @@ class CallRecordQuerySetTests(TestCase):
         mommy.make(CallRecord, call_id=self.call_id + 1, type=CallRecord.END, timestamp="2017-12-12T15:07:13Z")
 
         pairs = CallRecord.objects.get_completed_pairs(timestamp__month=12, timestamp__year=2017)
+
+        self.assertEqual(len(pairs), 2)
+
+    def test_get_pairs_by_period_and_subscriber(self):
+        mommy.make(CallRecord,
+                   call_id=self.call_id,
+                   type=CallRecord.START,
+                   timestamp="2017-12-12T15:07:13Z",
+                   source=self.subscriber)
+        mommy.make(CallRecord,
+                   call_id=self.call_id,
+                   type=CallRecord.END,
+                   timestamp="2017-12-12T15:07:13Z")
+        mommy.make(CallRecord,
+                   call_id=self.call_id + 1,
+                   type=CallRecord.START,
+                   timestamp="2017-12-12T15:07:13Z",
+                   source=self.subscriber)
+        mommy.make(CallRecord,
+                   call_id=self.call_id + 1,
+                   type=CallRecord.END,
+                   timestamp="2017-12-12T15:07:13Z")
+        mommy.make(CallRecord,
+                   call_id=self.call_id + 2,
+                   type=CallRecord.START,
+                   timestamp="2017-12-12T15:07:13Z",
+                   source='000000000')
+        mommy.make(CallRecord,
+                   call_id=self.call_id + 2,
+                   type=CallRecord.END,
+                   timestamp="2017-12-12T15:07:13Z")
+
+        pairs = CallRecord.objects.get_completed_pairs(timestamp__month=12, timestamp__year=2017,
+                                                       source=self.subscriber)
 
         self.assertEqual(len(pairs), 2)
 

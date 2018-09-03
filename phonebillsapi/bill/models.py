@@ -1,4 +1,8 @@
+from datetime import timedelta
+
 from django.db import models
+
+from phonebillsapi.api.models import CallRecord
 
 
 class Tariff(models.Model):
@@ -16,3 +20,25 @@ class Tariff(models.Model):
     call_charge = models.DecimalField(max_digits=10, decimal_places=2)
     interval_start = models.TimeField()
     interval_end = models.TimeField()
+
+
+class BillCallRecordQuerySet(models.QuerySet):
+    def filter_by_references(self, month, year, subscriber=None):
+        return self.filter(call_record_end__timestamp__month=month, call_record_end__timestamp__year=year,
+                           call_record_end__call_id__in=self.filter(call_record_start__source=subscriber)
+                           .values_list('call_record_start__call_id', flat=True))
+
+
+class BillCallRecord(models.Model):
+
+    objects = BillCallRecordQuerySet.as_manager()
+
+    call_record_start = models.ForeignKey(CallRecord, on_delete=models.SET_NULL, null=True,
+                                          related_name='bill_record_start')
+    call_record_end = models.ForeignKey(CallRecord, on_delete=models.SET_NULL, null=True,
+                                        related_name='bill_record_end')
+    call_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    @property
+    def call_duration(self):
+        return str(self.call_record_end.timestamp - self.call_record_start.timestamp)

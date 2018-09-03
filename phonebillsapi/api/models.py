@@ -8,12 +8,14 @@ class CallRecordQuerySet(models.QuerySet):
 
         return start_callrecord, end_callrecord
 
-    def get_completed_pairs(self, *args, **kwargs):
+    def get_completed_pairs(self, source=None, *args, **kwargs):
         pairs = []
-        call_start_records = self.filter(type=CallRecord.END, *args, **kwargs)
+        call_end_records = self.filter(type=CallRecord.END, *args, **kwargs)
+        call_start_records_ids = self.filter(type=CallRecord.START, source=source).values_list('call_id', flat=True)
 
-        for call_record in call_start_records:
-            pairs.append(self.get_pair(call_id=call_record.call_id))
+        for call_record in call_end_records:
+            if call_record.call_id in call_start_records_ids:
+                pairs.append(self.get_pair(call_id=call_record.call_id))
 
         return pairs
 
