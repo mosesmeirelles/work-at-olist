@@ -10,5 +10,5 @@ router.register('callrecord', CallRecordViewSet, base_name='callrecord')
 router.register('tariff', TariffViewSet, base_name='tariff')
 
 urlpatterns = [
-    path('bill-list/(<slug:subscriber>)/', BillViewSet.as_view({'get': 'list'}), name='bill-list')
+    path('bill/<slug:subscriber>/', BillViewSet.as_view({'get': 'list'}), name='bill-list')
 ] + router.urls

@@ -55,23 +55,23 @@ Full documentation can be acessed at [docs on Heroku](https://phonebills.herokua
 
 **Call Record Resources**
 
-* `GET` callrecord-list
-* `POST` callrecord-list
-* `GET` callrecord-detail/:id
-* `PUT` callrecord-detail/:id
-* `DELETE` callrecord-detail/:id
+* `GET` callrecord
+* `POST` callrecord
+* `GET` callrecord/:id
+* `PUT` callrecord/:id
+* `DELETE` callrecord/:id
 
 **Tariff Resources**
 
-* `GET` tariff-list
-* `POST` tariff-list
-* `GET` tariff-detail/:id
-* `PUT` tariff-detail/:id
-* `DELETE` tariff-detail/:id
+* `GET` tariff
+* `POST` tariff
+* `GET` tariff/:id
+* `PUT` tariff/:id
+* `DELETE` tariff/:id
 
 **Phone Bill Resources**
 
-* `GET` bill-list/:phone_number (optional query params: month & year)
+* `GET` bill/:phone_number (optional query params: month & year)
 
 
 ## Notes
