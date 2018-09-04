@@ -78,8 +78,7 @@ Full documentation can be acessed at [docs on Heroku](https://phonebills.herokua
 
 ### Questions
 
-- How to prevent record loss or inconsistency? (flexibility)
-- Commits pattern
+- Commits pattern is correct?
 - Update a call record is a security failure?
 - Is possible to have call on same time for same source/destination?
 
