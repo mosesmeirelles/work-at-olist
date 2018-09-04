@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'phonebillsapi.api',
     'phonebillsapi.bill',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

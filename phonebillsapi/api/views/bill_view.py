@@ -11,6 +11,10 @@ from phonebillsapi.bill.use_cases.get_phone_bill_price_use_case import GetPhoneB
 
 
 class BillViewSet(viewsets.ViewSet):
+    """
+    list:
+    Return a Bill price and list of all Bill call records.
+    """
     def list(self, request, subscriber=None):
         today = timezone.now()
         month = self.request.query_params.get('month')

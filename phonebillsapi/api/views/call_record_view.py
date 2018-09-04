@@ -1,5 +1,4 @@
 from rest_framework import status, viewsets
-from rest_framework.exceptions import APIException
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -10,6 +9,22 @@ from phonebillsapi.bill.use_cases.get_call_price_use_case import GetCallPriceUse
 
 
 class CallRecordViewSet(viewsets.ViewSet):
+    """
+    retrieve:
+    Return the given call record.
+
+    list:
+    Return a list of all existing call records.
+
+    create:
+    Create a new call record.
+
+    update:
+    Update an existing call record.
+
+    delete:
+    Delete a call record.
+    """
     def create(self, request):
         serializer = CallRecordSerializer(data=request.data.copy())
 
@@ -55,4 +70,3 @@ class CallRecordViewSet(viewsets.ViewSet):
 
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-
