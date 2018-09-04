@@ -83,7 +83,6 @@ Full documentation can be acessed at [docs on Heroku](https://phonebills.herokua
 - Is possible to have call on same time for same source/destination?
 
 
-### Pendencies
+### Improvements
 
-- verify case of call starts on standard time and finishes during standard call next day
-- implement calculations using tariff to reduced time (ignored today)
+- implement calculations using tariff to reduced time (ignored today considering value zero)
