@@ -15,3 +15,6 @@ deploy:
   app: phonebills
   on:
     repo: moshemeirelles/work-at-olist
+  run:
+    - python manage.py migrate
+    - python manage.py loaddata fixtures/*.json

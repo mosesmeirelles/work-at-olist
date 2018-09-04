@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.db import models
 
 from phonebillsapi.api.models import CallRecord
@@ -41,4 +39,9 @@ class BillCallRecord(models.Model):
 
     @property
     def call_duration(self):
-        return str(self.call_record_end.timestamp - self.call_record_start.timestamp)
+        delta = self.call_record_end.timestamp - self.call_record_start.timestamp
+        days, seconds = delta.days, delta.seconds
+        hours = days * 24 + seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+        return '{hours:02d}:{minutes:02d}:{seconds:02d}'.format(hours=hours, minutes=minutes, seconds=seconds)

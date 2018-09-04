@@ -1,4 +1,8 @@
+import calendar
+
+from django.utils import timezone
 from rest_framework import viewsets, status
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
 from phonebillsapi.api.serializers import BillCallRecordSerializer
@@ -8,8 +12,17 @@ from phonebillsapi.bill.use_cases.get_phone_bill_price_use_case import GetPhoneB
 
 class BillViewSet(viewsets.ViewSet):
     def list(self, request, subscriber=None):
+        today = timezone.now()
         month = self.request.query_params.get('month')
         year = self.request.query_params.get('year')
+
+        if month and year and today.month == int(month):
+            raise APIException("Reference period hasn't ended.")
+
+        if not month and not year:
+            last_date = today.replace(day=1) - timezone.timedelta(days=1)
+            month = str(last_date.month)
+            year = str(last_date.year)
 
         use_case = GetPhoneBillPriceUseCase.initialize()
         bill_price = use_case.execute(month, year, subscriber)

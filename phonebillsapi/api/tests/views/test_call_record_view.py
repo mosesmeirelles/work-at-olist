@@ -100,3 +100,47 @@ class TestCallRecordView(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['source'], new_data['source'])
+
+    def test_validation_insert_two_equal_call_records(self):
+        mommy.make(CallRecord,
+                   id=10,
+                   call_id=70,
+                   type=CallRecord.START)
+
+        data = {
+            "type": "start",
+            "timestamp": "2016-02-29T12:00:00Z",
+            "call_id": 70,
+            "source": '99988526423',
+            "destination": '9993468278'
+        }
+
+        expected = {
+            "non_field_errors": [
+                "The fields call_id, type must make a unique set."
+            ]
+        }
+
+        response = self.client.post(self.url_list, data=json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.json(), expected)
+
+    def test_validation_phone_number(self):
+        data = {
+            "type": "start",
+            "timestamp": "2016-02-29T12:00:00Z",
+            "call_id": 70,
+            "source": '99988526423',
+            "destination": '123as'
+        }
+
+        expected = {
+            'destination': ["Phone number must be entered in the format '12345678910'. 10 to 11 digits allowed."]
+        }
+
+        response = self.client.post(self.url_list, data=json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.json(), expected)
+

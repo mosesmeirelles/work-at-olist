@@ -1,8 +1,11 @@
 import datetime
 import json
+from unittest.mock import patch
 
 from django.test import TestCase
+from django.utils import timezone
 from model_mommy import mommy
+from rest_framework import status
 from rest_framework.reverse import reverse
 
 from phonebillsapi import settings
@@ -51,7 +54,7 @@ class TestBillView(TestCase):
                 'destination': '9993468278',
                 'call_start_date': '2016-02-29',
                 'call_start_time': '12:00:00',
-                'call_duration': '2:00:00',
+                'call_duration': '02:00:00',
                 'call_price': '11.16'
             }],
             'subscriber': '99988526423',
@@ -62,5 +65,42 @@ class TestBillView(TestCase):
 
         response = self.client.get(self.url, {'month': 2, 'year': 2016})
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json(), expected)
+
+    @patch('django.utils.timezone.now')
+    def test_get_bill_of_march_2018_without_parameters(self, mocked_timezone):
+        mocked_timezone.return_value = datetime.datetime(2018, 4, 10, tzinfo=timezone.utc)
+
+        expected = {
+            'bill_call_records': [{
+                'destination': '9993468278',
+                'call_start_date': '2018-02-28',
+                'call_start_time': '21:57:13',
+                'call_duration': '24:13:43',
+                'call_price': '86.94'
+            }],
+            'subscriber': '99988526423',
+            'month': '3',
+            'year': '2018',
+            'price': 86.94
+        }
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json(), expected)
+
+    @patch('django.utils.timezone.now')
+    def test_get_bill_on_going_period(self, mocked_timezone):
+        mocked_timezone.return_value = datetime.datetime(2018, 8, 10, tzinfo=timezone.utc)
+
+        expected = {
+            'detail': "Reference period hasn't ended."
+        }
+
+        response = self.client.get(self.url, {'month': 8, 'year': 2018})
+
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertEqual(response.json(), expected)
 
